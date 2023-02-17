@@ -37,7 +37,7 @@ const LeftSideBar = () => {
     };
 
   return (
-    <div className='flex'>
+    <div className='hidden sm:flex'>
       <div className="w-1/2">
         <Slider {...settings}>
             <div className='w-1/2'>

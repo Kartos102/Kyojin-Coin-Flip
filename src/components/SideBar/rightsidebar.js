@@ -32,12 +32,12 @@ const RightSideBar = () => {
         verticalSwiping: true,
         swipeToSlide: true,
         autoplay: true,
-        autoplaySpeed: 0,
+        autoplaySpeed: 4,
         rtl: true,
     };
 
   return (
-    <div className='flex'>
+    <div className='hidden sm:flex'>
       <div className="w-1/2">
         <Slider {...settings}>
             <div className='w-1/2'>

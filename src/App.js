@@ -5,17 +5,15 @@ import Coinflip from './components/coinflip/coinflip';
 import LeftSideBar from './components/SideBar/leftsidebar';
 import RightSideBar from './components/SideBar/rightsidebar';
 
-import metamask from './images/metamask.png';
-
 
 function App() {
   const { connect, disconnect, isActive, account, shouldDisable } = useMetaMask()
   return (
     <div className='bg-[url("../public/img/bg_dark.png")] h-[100vh] bg-cover overflow-hidden'>
-      <div className='grid grid-cols-4 gap-4'>
+      <div className='grid grid-cols-6 sm:grid-cols-4 sm:gap-4'>
         <div className='col-span-1'><LeftSideBar /></div>
-        <div className='col-span-2'>
-          <div className='w-1/6 py-[3vh] mx-auto'>
+        <div className='col-span-4 sm:col-span-2'>
+          <div className='w-1/6 sm:w-1/3 lg:w-1/6 py-[3vh] mx-auto'>
             <img src="img/logo.png" alt="logo"/>
           </div>
           <div className="text-center pt-[5vh]">
