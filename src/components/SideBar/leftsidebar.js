@@ -38,7 +38,7 @@ const LeftSideBar = () => {
 
   return (
     <div className='hidden sm:flex'>
-      <div className="w-1/2">
+      <div className="w-1/2 pr-[5px]">
         <Slider {...settings}>
             <div className='w-1/2'>
               <img src={LunBull55} alt={"LunBull55"}/>

@@ -10,9 +10,10 @@ const CoinflipAddress = "0x8C1514A171667593e0AAaa9C7F6095e13B648203";
 
 
 const Coinflip = () => {
-  const [guess, setGuess] = useState(0);
+  const [guess, setGuess] = useState(null);
   const [betAmount, setBetAmount] = useState(0);
   const [errorMessage, setErrorMessage] = useState('');
+  const [alert, setAlert] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { connect, disconnect, isActive, account, shouldDisable }= useMetaMask();
 
@@ -25,17 +26,25 @@ const Coinflip = () => {
       // convert a currency unit from wei to ether
       const balanceInMatic = ethers.utils.formatEther(balance)
       if(balanceInMatic < betAmount) {
-        setErrorMessage("You don't have enough matic for this flip")
+        setErrorMessage("You don't have enough Matic for this flip");
+        return;
       }
     })
+
+    setAlert("");
+    setErrorMessage("");
+
+    if(guess === null) {
+      setErrorMessage("Please pick one of HEADS or TAILS");
+      return;
+    }
     
     if(betAmount <= 0) {
-      toast.error("please select the corret amount",{
-        position: toast.POSITION.TOP_RIGHT,
-        autoClose: 3000,
-        transition: Slide
-      });
+      setErrorMessage("Please select the corret amount");
+      return;
     }
+
+   
 
     try {
       setIsLoading(true);
@@ -44,54 +53,68 @@ const Coinflip = () => {
         console.log(to,amount,event)
         console.log(`${ utils.formatEther(amount)} is sent to ${to}`);
         setIsLoading(false);
-        toast.success("Win",{
-          position: toast.POSITION.TOP_RIGHT,
-          autoClose: 3000,
-          transition: Slide
-        })
+        setAlert("Congratulations!, You win!")
       });
       
       coinflipcontract.on("Lose", (to, amount, event) => {
         console.log(to,amount,event)
         console.log(`${ to } loss ${ utils.formatEther(amount) }`);
         setIsLoading(false);
-        toast.error("Lose",{
-          position: toast.POSITION.TOP_RIGHT,
-          autoClose: 3000,
-          transition: Slide
-        })
+        setAlert("Ooops!, You Lose!")
+
       });
     } catch (error) {
       setIsLoading(false);
-      toast.error("Failed, Please try again",{
-        position: toast.POSITION.TOP_RIGHT,
-        autoClose: 3000,
-        transition: Slide
-      })
+      setErrorMessage("Failed, Please try again");
     }
+
+    setBetAmount(0);
+    setGuess(null);
+    
   }
 
   return (
     <div className="text-[#000000] rounded-md border-[2px] bg-[#0f172aaa]">
         <ToastContainer />
-        <div className='flex justify-center  font-bold  pt-[5vh] text-[#ffffff] uppercase'>I like</div>
+        <div className='flex justify-center  font-bold  pt-[5vh] text-[#ffffff] uppercase'>I Pick</div>
         <div className='flex justify-center  font-bold  gap-x-4 pt-[3vh]'>
-            <button className='px-[20px] sm:px-[30px] py-[8px] sm:py-[10px] bg-[#000000] text-center uppercase bg-[#FEDF57] rounded-md hover:bg-violet-600 active:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-800' onClick={()=>setGuess(1)}>Heaos</button>
-            <button className='px-[20px] sm:px-[30px] py-[8px] sm:py-[10px] bg-[#000000] text-center uppercase bg-[#FEDF57] rounded-md hover:bg-violet-600 active:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-800' onClick={()=>setGuess(0)}>Tails</button>
+            {guess===0?<button className='px-[20px] sm:px-[30px] py-[8px] sm:py-[10px] text-center uppercase rounded-md bg-[#00ff55]' onClick={()=>setGuess(0)}>Heads</button>
+            :
+            <button className='px-[20px] sm:px-[30px] py-[8px] sm:py-[10px] bg-[#000000] text-center uppercase bg-[#FEDF57] rounded-md hover:bg-[#00ff55]' onClick={()=>setGuess(0)}>Heads</button>
+            }
+            {guess===1?<button className='px-[20px] sm:px-[30px] py-[8px] sm:py-[10px]  text-center uppercase bg-[#00ff55] rounded-md' onClick={()=>setGuess(1)}>Tails</button>
+            :
+            <button className='px-[20px] sm:px-[30px] py-[8px] sm:py-[10px] bg-[#000000] text-center uppercase bg-[#FEDF57] rounded-md hover:bg-[#00ff55]' onClick={()=>setGuess(1)}>Tails</button>}
         </div>
         <div className='flex justify-center  font-bold  pt-[3vh] text-[#ffffff] uppercase'>For</div>
         <div >
             <div className='flex justify-center font-medium gap-x-4 pt-[3vh]'>
-                <button className= 'px-[8px] sm:px-[10px] py-[3px] sm:py-[5px] bg-[#000000] text-center bg-[#FEDF57] rounded-md hover:bg-violet-600 active:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-800' onClick={()=>setBetAmount(1)}>1 MATIC</button>
-                <button  className='px-[8px] sm:px-[10px] py-[3px] sm:py-[5px] bg-[#000000] text-center bg-[#FEDF57] rounded-md hover:bg-violet-600 active:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-800'  onClick={()=>setBetAmount(2)}>2 MATIC</button>
-                <button  className='px-[8px] sm:px-[10px] py-[3px] sm:py-[5px] bg-[#000000] text-center bg-[#FEDF57] rounded-md hover:bg-violet-600 active:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-800'  onClick={()=>setBetAmount(5)}>5 MATIC</button>
+                {betAmount===1?<button className= 'px-[8px] sm:px-[10px] py-[3px] sm:py-[5px]  text-center bg-[#00ff55] rounded-md 'disabled>1 MATIC</button>
+                :
+                <button className= 'px-[8px] sm:px-[10px] py-[3px] sm:py-[5px] bg-[#000000] text-center bg-[#FEDF57] rounded-md hover:bg-[#00ff55]' onClick={()=>setBetAmount(1)}>1 MATIC</button>}
+
+               {betAmount===2?<button className= 'px-[8px] sm:px-[10px] py-[3px] sm:py-[5px]  text-center bg-[#00ff55] rounded-md ' disabled>2 MATIC</button>
+                :
+                <button className= 'px-[8px] sm:px-[10px] py-[3px] sm:py-[5px] bg-[#000000] text-center bg-[#FEDF57] rounded-md hover:bg-[#00ff55]' onClick={()=>setBetAmount(2)}>2 MATIC</button>}
+
+               {betAmount===5?<button className= 'px-[8px] sm:px-[10px] py-[3px] sm:py-[5px]  text-center bg-[#00ff55] rounded-md ' disabled>5 MATIC</button>
+                :
+                <button className= 'px-[8px] sm:px-[10px] py-[3px] sm:py-[5px] bg-[#000000] text-center bg-[#FEDF57] rounded-md hover:bg-[#00ff55]' onClick={()=>setBetAmount(5)}>5 MATIC</button>}
             </div>
             <div className='flex justify-center font-medium gap-x-4 pt-[3vh] pb-[3vh]'>
-                <button  className='px-[8px] sm:px-[10px] py-[3px] sm:py-[5px] bg-[#000000] text-center bg-[#FEDF57] rounded-md hover:bg-violet-600 active:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-800'  onClick={()=>setBetAmount(10)}>10 MATIC</button>
-                <button  className='px-[8px] sm:px-[10px] py-[3px] sm:py-[5px] bg-[#000000] text-center bg-[#FEDF57] rounded-md hover:bg-violet-600 active:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-800' onClick={()=>setBetAmount(25)}>25 MATIC</button>
+                {betAmount===10?<button className= 'px-[8px] sm:px-[10px] py-[3px] sm:py-[5px]  text-center bg-[#00ff55] rounded-md ' disabled>10 MATIC</button>
+                :
+                <button className= 'px-[8px] sm:px-[10px] py-[3px] sm:py-[5px] bg-[#000000] text-center bg-[#FEDF57] rounded-md hover:bg-[#00ff55]' onClick={()=>setBetAmount(10)}>10 MATIC</button>}
+
+                {betAmount===25?<button className= 'px-[8px] sm:px-[10px] py-[3px] sm:py-[5px]  text-center bg-[#00ff55] rounded-md ' disabled>25 MATIC</button>
+                :
+                <button className= 'px-[8px] sm:px-[10px] py-[3px] sm:py-[5px] bg-[#000000] text-center bg-[#FEDF57] rounded-md hover:bg-[#00ff55]' onClick={()=>setBetAmount(25)}>25 MATIC</button>}
             </div>
-            <div className='flex justify-center text-[#ee0000]' >
+            <div className='flex justify-center font-medium text-[#ff2200] pb-[3px]' >
               {errorMessage}
+            </div>
+            <div className='flex justify-center font-medium text-[#ff2200] pb-[3px]' >
+              {alert}
             </div>
             {isLoading? <div className="flex items-center justify-center">
               <button type="button"
@@ -104,11 +127,11 @@ const Coinflip = () => {
                           d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
                       </path>
                   </svg>
-                  Fliping...
+                  Flipping...
               </button>
             </div>:
             <div className='flex justify-center'>
-              <button  className='px-[8px] sm:px-[10px] py-[3px] sm:py-[5px] mb-[5vh]  bg-[#000000] text-center bg-[#FE0F57] rounded-md hover:bg-violet-600 active:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-800 font-semibold'  onClick={() => takecoinflip()}>
+              <button  className='px-[8px] sm:px-[10px] py-[3px] sm:py-[5px] mb-[5vh]  bg-[#000000] text-center bg-gradient-to-r from-cyan-500 to-blue-500 rounded-md hover:bg-[#00ff55] font-semibold'  onClick={() => takecoinflip()}>
                   Double or Nothing
               </button>
             </div>
