@@ -3,9 +3,11 @@ import useMetaMask from '../../hooks/useMetaMask';
 import Coinflipabi from '../../coinflip.json'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
-import { Slide } from 'react-toastify'
+
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
 const { ethers, utils, getBalance } = require("ethers")
-const CoinflipAddress = "0x8C1514A171667593e0AAaa9C7F6095e13B648203";
+const CoinflipAddress = "0x530195D2c21C8e4db8cDDAeb120847046998e532";
 
 
 
@@ -13,9 +15,15 @@ const Coinflip = () => {
   const [guess, setGuess] = useState(null);
   const [betAmount, setBetAmount] = useState(0);
   const [errorMessage, setErrorMessage] = useState('');
-  const [alert, setAlert] = useState("");
+  const [loseAlert, setLoseAlert] = useState("");
+  const [winAlert, setWinAlert] = useState("");
+
   const [isLoading, setIsLoading] = useState(false);
   const { connect, disconnect, isActive, account, shouldDisable }= useMetaMask();
+  const [show, setShow] = useState(false);
+  const [transactions, setTransaction] = useState();
+
+  const handleClose = () => setShow(false);
 
   const takecoinflip = async() => {
     const provider = new ethers.providers.Web3Provider(window.ethereum)
@@ -31,7 +39,8 @@ const Coinflip = () => {
       }
     })
 
-    setAlert("");
+    setWinAlert("");
+    setLoseAlert("");
     setErrorMessage("");
 
     if(guess === null) {
@@ -44,34 +53,57 @@ const Coinflip = () => {
       return;
     }
 
-   
-
     try {
       setIsLoading(true);
       await coinflipcontract.TakeCoinFlip(guess, {value: ethers.utils.parseEther((betAmount).toString())});
       coinflipcontract.on("Win", (to, amount, event) => {
-        console.log(to,amount,event)
-        console.log(`${ utils.formatEther(amount)} is sent to ${to}`);
         setIsLoading(false);
-        setAlert("Congratulations!, You win!")
+        setWinAlert("Congratulations!, You win!")
       });
       
       coinflipcontract.on("Lose", (to, amount, event) => {
-        console.log(to,amount,event)
-        console.log(`${ to } loss ${ utils.formatEther(amount) }`);
         setIsLoading(false);
-        setAlert("Ooops!, You Lose!")
+        setLoseAlert("Ooops!, You Lose!")
 
       });
     } catch (error) {
+      console.log(error)
       setIsLoading(false);
       setErrorMessage("Failed, Please try again");
-    }
-
+    } 
     setBetAmount(0);
     setGuess(null);
-    
   }
+  const handleShow = async()=> {
+    setShow(true);
+    const provider = new ethers.providers.Web3Provider(window.ethereum)
+    const signer = provider.getSigner();
+    const coinflipcontract =  new ethers.Contract(CoinflipAddress, Coinflipabi, signer);
+    const historyCount = await coinflipcontract.flipCount();
+    let temp_history = [];
+    for(let i = historyCount; i>0 ;i--) {
+      const temp_flip_history = await coinflipcontract.flipResult(i);
+      const currentDate = new Date();
+      const timeStamp = currentDate.getTime();
+      const flowTime = timeStamp/1000-Number(temp_flip_history["time"]);
+      let temp_flow_time = "";
+      const hour = flowTime/3600 >> 0;
+      const minute = (flowTime - 3600 * hour ) /60 >>0;
+      let second = flowTime - 3600 * hour - 60 * minute;
+      second = second - second % 1;
+      temp_flow_time = hour.toString() + " hr: " + minute.toString() + " min: " + second.toString() + " sec";
+      
+
+      temp_history.push({
+        "address":temp_flip_history["user"],
+        "amount":ethers.utils.formatEther(temp_flip_history["amount"].toString()),
+        "result":temp_flip_history["result"],
+        "time": temp_flow_time
+      })
+    }
+    setTransaction(temp_history);
+  }
+ 
 
   return (
     <div className="text-[#000000] rounded-md border-[2px] bg-[#0f172aaa]">
@@ -114,7 +146,10 @@ const Coinflip = () => {
               {errorMessage}
             </div>
             <div className='flex justify-center font-medium text-[#ff2200] pb-[3px]' >
-              {alert}
+              {loseAlert}
+            </div>
+            <div className='flex justify-center font-medium text-[#22ff00] pb-[3px]' >
+              {winAlert}
             </div>
             {isLoading? <div className="flex items-center justify-center">
               <button type="button"
@@ -137,6 +172,26 @@ const Coinflip = () => {
             </div>
             }
         </div>
+        <button  className='px-[8px] sm:px-[10px] py-[3px] sm:py-[5px] mb-[5vh]  bg-[#000000] text-center bg-gradient-to-r from-cyan-500 to-blue-500 rounded-md hover:bg-[#00ff55] font-semibold'  onClick={() => handleShow()}>
+            History
+        </button>
+        <Modal show={show} fullscreen={true}  onHide={handleClose} className='bg-[#0f172a55]'>
+          <Modal.Header closeButton>
+            <Modal.Title>CoinFlip History</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            {transactions && transactions.map(transaction => (  
+              <li>  
+                {transaction.address.slice(0,5)}...{transaction.address.slice(-5)}&nbsp;&nbsp;flipped&nbsp;&nbsp;{transaction.amount}&nbsp;Matic&nbsp;&nbsp;and&nbsp;&nbsp;{transaction.result?'doubled':'got rugged'}&nbsp;&nbsp;{transaction.time}&nbsp;&nbsp;ago
+              </li>  
+            ))}  
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleClose}>
+              Close
+            </Button>
+          </Modal.Footer>
+        </Modal>
     </div>
   );
 }

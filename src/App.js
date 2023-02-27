@@ -4,7 +4,7 @@ import useMetaMask from './hooks/useMetaMask';
 import Coinflip from './components/coinflip/coinflip';
 import LeftSideBar from './components/SideBar/leftsidebar';
 import RightSideBar from './components/SideBar/rightsidebar';
-
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
   const { connect, disconnect, isActive, account, shouldDisable } = useMetaMask()
