@@ -1,13 +1,16 @@
-import React from 'react';
-import './App.css';
-import useMetaMask from './hooks/useMetaMask';
-import Coinflip from './components/coinflip/coinflip';
-import LeftSideBar from './components/SideBar/leftsidebar';
-import RightSideBar from './components/SideBar/rightsidebar';
-import 'bootstrap/dist/css/bootstrap.min.css';
-// eslint-disable-next-line
+import React from "react";
+import "./App.css";
+import useMetaMask from "./hooks/useMetaMask";
+import Coinflip from "./components/coinflip/coinflip";
+import LeftSideBar from "./components/SideBar/leftsidebar";
+import RightSideBar from "./components/SideBar/rightsidebar";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "@fontsource/silkscreen";
+import "@fontsource/vt323";
+import "@fontsource/unifont";
+
 function App() {
-  const { connect, isActive, shouldDisable } = useMetaMask()
+  const { connect, isActive, shouldDisable } = useMetaMask();
   return (
     <div className='bg-[url("../public/img/iced.jpg")] h-[100vh] bg-cover overflow-x-hidden'>
       <div className='grid grid-cols-4 sm:gap-4'>
