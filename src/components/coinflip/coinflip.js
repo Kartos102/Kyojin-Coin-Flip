@@ -2,14 +2,14 @@ import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import useMetaMask from "../../hooks/useMetaMask";
 import Coinflipabi from "../../coinflip.json";
-import MintAbi from "../../mint.json";
+// import MintAbi from "../../mint.json";
 import "react-toastify/dist/ReactToastify.css";
 const { ethers } = require("ethers");
-const CoinflipAddress = "0x0E44E6463f44454c11E31805A415bBC2DFFb5C96";
+const CoinflipAddress = "0x442E8E6c2B63deE40B22BD9FA227F6F0ec77B090";
 
-const obsidian = "0x6E73490b7E1d8b600fAB2606FD6B91D269cba92F";
-const gold = "0x41eA4D4dCE74efD5122d6Afc05461056aEE42b22";
-const ice = "0x4BB3563378278533C0f0f7b1d654F6CC83e976Dd";
+// const obsidian = "0x6E73490b7E1d8b600fAB2606FD6B91D269cba92F";
+// const gold = "0x41eA4D4dCE74efD5122d6Afc05461056aEE42b22";
+// const ice = "0x4BB3563378278533C0f0f7b1d654F6CC83e976Dd";
 
 function DisplayPlays(props) {
   if (props.transactions !== undefined) {
@@ -83,13 +83,13 @@ const Coinflip = () => {
       coinflipcontract.on("Win", (to, amount, event) => {
         console.log(to, amount, event);
         setIsLoading(false);
-        setWinAlert("Congratulations!, You win!");
+        setWinAlert("Congratulations! You win!");
       });
       
       coinflipcontract.on("Lose", (to, amount, event) => {
         console.log(to, amount, event);
         setIsLoading(false);
-        setLoseAlert("Ooops!, You Lose!");
+        setLoseAlert("Ooops! You Lose!");
       });
 
       const result = await tx.wait();
@@ -105,53 +105,53 @@ const Coinflip = () => {
     handleShow();
   };
 
-  const ObsidianMint = async() => {
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    const signer = provider.getSigner();
-    const ObsidianMintContract =  new ethers.Contract(obsidian, MintAbi, signer);
-    console.log(ObsidianMintContract);
-    try {
-      await ObsidianMintContract.mint();
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const ObsidianMint = async() => {
+  //   const provider = new ethers.providers.Web3Provider(window.ethereum);
+  //   const signer = provider.getSigner();
+  //   const ObsidianMintContract =  new ethers.Contract(obsidian, MintAbi, signer);
+  //   console.log(ObsidianMintContract);
+  //   try {
+  //     await ObsidianMintContract.mint();
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
-  const IceMint = async() => {
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    const signer = provider.getSigner();
-    const IceMintContract =  new ethers.Contract(ice, MintAbi, signer);
-    try {
-      await IceMintContract.mint();
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  const GoldMint = async() => {
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    const signer = provider.getSigner();
-    const GoldMintContract =  new ethers.Contract(gold, MintAbi, signer);
-    try {
-      await GoldMintContract.mint();
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const IceMint = async() => {
+  //   const provider = new ethers.providers.Web3Provider(window.ethereum);
+  //   const signer = provider.getSigner();
+  //   const IceMintContract =  new ethers.Contract(ice, MintAbi, signer);
+  //   try {
+  //     await IceMintContract.mint();
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+  // const GoldMint = async() => {
+  //   const provider = new ethers.providers.Web3Provider(window.ethereum);
+  //   const signer = provider.getSigner();
+  //   const GoldMintContract =  new ethers.Contract(gold, MintAbi, signer);
+  //   try {
+  //     await GoldMintContract.mint();
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
-  const Distribute = async() => {
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    const signer = provider.getSigner();
-    const coinflipcontract =  new ethers.Contract(CoinflipAddress, Coinflipabi, signer);
+  // const Distribute = async() => {
+  //   const provider = new ethers.providers.Web3Provider(window.ethereum);
+  //   const signer = provider.getSigner();
+  //   const coinflipcontract =  new ethers.Contract(CoinflipAddress, Coinflipabi, signer);
 
-    provider.getBalance(account).then(async (balance) => {
-      const balanceInMatic = ethers.utils.formatEther(balance);
-      try {
-        await coinflipcontract.distributeTokens( {value: ethers.utils.parseEther((balanceInMatic*0.95).toString())});
-      } catch (error) {
-        console.log(error);
-      }
-    });
-  };
+  //   provider.getBalance(account).then(async (balance) => {
+  //     const balanceInMatic = ethers.utils.formatEther(balance);
+  //     try {
+  //       await coinflipcontract.distributeTokens( {value: ethers.utils.parseEther((balanceInMatic*0.95).toString())});
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   });
+  // };
 
   const handleShow = async()=> {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -182,6 +182,17 @@ const Coinflip = () => {
     }
     setTransaction(temp_history);
   };
+
+  // const SetTreasury = async() => {
+  //   const provider = new ethers.providers.Web3Provider(window.ethereum);
+  //   const signer = provider.getSigner();
+  //   const coinflipcontract =  new ethers.Contract(CoinflipAddress, Coinflipabi, signer);
+  //   try {
+  //     await coinflipcontract.updateTreasuryWallet("0xbBFa44eD81431770BcEf2C5d48ABf3F478E36716")
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }
  
   useEffect(() => {
     handleShow();
@@ -256,7 +267,7 @@ const Coinflip = () => {
         </div>
       </div>
 
-      <div className='pt-[20px]'>
+      {/* <div className='pt-[20px]'>
         <button className='w-[150px] px-[8px] sm:px-[10px] py-[3px] sm:py-[5px] mb-[3vh] text-center bg-green-500 text-white outline-dotted outline-1 outline-green-500 rounded-sm hover:bg-yellow-400 hover:outline-yellow-400 hover:outline-offset-4 hover:scale-110 duration-1000 active:bg-cyan-300 text-xl sm:text-2xl' onClick={() => ObsidianMint()}>
             Obsidian
         </button>
@@ -272,7 +283,7 @@ const Coinflip = () => {
         <button className='w-[150px] px-[8px] sm:px-[10px] py-[3px] sm:py-[5px] mb-[3vh] text-center bg-green-500 text-white outline-dotted outline-1 outline-green-500 rounded-sm hover:bg-yellow-400 hover:outline-yellow-400 hover:outline-offset-4 hover:scale-110 duration-1000 active:bg-cyan-300 text-xl sm:text-2xl' onClick={() => Distribute()}>
             Airdrop
         </button>
-      </div>
+      </div> */}
         
       <div className="w-11/12 sm:w-[100%] 2xl:w-1/2 m-auto mt-[10px] text-[#ffffff] rounded-sm border-[2px] bg-[#0f172aaa] backdrop-blur-sm outline-dashed outline-cyan-300 hover:outline-2 hover:outline-offset-8 duration-1000">
         <div className='text-2xl font-bold pt-[2vh] uppercase'>Recent Plays</div>
