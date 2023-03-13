@@ -39,57 +39,57 @@ const RightSideBar = () => {
 
   return (
     <div className='hidden sm:flex'>
-    <div className="w-1/2 pr-[5px]">
-      <Slider {...settings}>
-        <div className='w-1/2'>
-          <img src={LunBull55} alt={"LunBull55"}/>
-        </div>
-        <div className='w-1/2'>
-          <img src={LunBull195} alt={"LunBull195"}/>
-        </div>
-        <div className='w-1/2'>
-          <img src={LunBull303} alt={"LunBull303"}/>
-        </div>
-        <div className='w-1/2  gap-x-2 '>
-          <img src={LunBull307} alt={"LunBull307"}/>
-        </div>
-        <div className='w-1/2'>
-          <img src={LunBull394} alt={"LunBull394"}/>
-        </div>
-        <div className='w-1/2'>
-          <img src={LunBull410} alt={"LunBull410"}/>
-        </div>
-        <div className='w-1/2'>
-          <img src={LunBull433} alt={"LunBull433"}/>
-        </div>
-      </Slider>
+      <div className="w-1/2 pr-[5px]">
+        <Slider {...settings}>
+          <div className='w-1/2'>
+            <img src={LunBull55} alt={"LunBull55"}/>
+          </div>
+          <div className='w-1/2'>
+            <img src={LunBull195} alt={"LunBull195"}/>
+          </div>
+          <div className='w-1/2'>
+            <img src={LunBull303} alt={"LunBull303"}/>
+          </div>
+          <div className='w-1/2  gap-x-2 '>
+            <img src={LunBull307} alt={"LunBull307"}/>
+          </div>
+          <div className='w-1/2'>
+            <img src={LunBull394} alt={"LunBull394"}/>
+          </div>
+          <div className='w-1/2'>
+            <img src={LunBull410} alt={"LunBull410"}/>
+          </div>
+          <div className='w-1/2'>
+            <img src={LunBull433} alt={"LunBull433"}/>
+          </div>
+        </Slider>
+      </div>
+      <div className="w-1/2 pr-[5px]">
+        <Slider {...settings}>
+          <div className='w-1/2'>
+            <img src={LunBull566} alt={"LunBull566"}/>
+          </div>
+          <div className='w-1/2'>
+            <img src={LunBull587} alt={"LunBull587"}/>
+          </div>
+          <div className='w-1/2'>
+            <img src={LunBull769} alt={"LunBull769"}/>
+          </div>
+          <div className='w-1/2  gap-x-2 '>
+            <img src={LunBull867} alt={"LunBull867"}/>
+          </div>
+          <div className='w-1/2'>
+            <img src={LunBull872} alt={"LunBull872"}/>
+          </div>
+          <div className='w-1/2'>
+            <img src={LunBull1052} alt={"LunBull1052"}/>
+          </div>
+          <div className='w-1/2'>
+            <img src={LunBull1053} alt={"LunBull1053"}/>
+          </div>
+        </Slider>
+      </div>
     </div>
-    <div className="w-1/2 pr-[5px]">
-      <Slider {...settings}>
-        <div className='w-1/2'>
-          <img src={LunBull566} alt={"LunBull566"}/>
-        </div>
-        <div className='w-1/2'>
-          <img src={LunBull587} alt={"LunBull587"}/>
-        </div>
-        <div className='w-1/2'>
-          <img src={LunBull769} alt={"LunBull769"}/>
-        </div>
-        <div className='w-1/2  gap-x-2 '>
-          <img src={LunBull867} alt={"LunBull867"}/>
-        </div>
-        <div className='w-1/2'>
-          <img src={LunBull872} alt={"LunBull872"}/>
-        </div>
-        <div className='w-1/2'>
-          <img src={LunBull1052} alt={"LunBull1052"}/>
-        </div>
-        <div className='w-1/2'>
-          <img src={LunBull1053} alt={"LunBull1053"}/>
-        </div>
-      </Slider>
-    </div>
-  </div>
   );
 };
 

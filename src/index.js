@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { BrowserRouter } from "react-router-dom";
 import "./index.css";
 import App from "./App";
 import Web3 from "web3/dist/web3.min.js";
@@ -15,7 +16,9 @@ root.render(
   <React.StrictMode>
     <Web3ReactProvider getLibrary={getLibrary}>
       <MetaMaskProvider>
-        <App />
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
       </MetaMaskProvider>
     </Web3ReactProvider>
   </React.StrictMode>
